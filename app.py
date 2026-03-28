@@ -5,7 +5,7 @@ import requests
 
 app = FastAPI()
 
-# Load YOLO
+# Load YOLO 
 model = YOLO("yolov8n.pt")
 
 # YOLO detection
@@ -65,3 +65,4 @@ async def predict(file: UploadFile = File(...)):
         "cause": cause,
         "precautions": precautions
     }
+    # test change
