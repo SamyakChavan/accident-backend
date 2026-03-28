@@ -2,5 +2,4 @@ fastapi
 uvicorn
 ultralytics
 torch
-pillow
-requests
+python-multipart
