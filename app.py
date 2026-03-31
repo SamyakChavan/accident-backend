@@ -22,13 +22,20 @@ def detect_objects(image_path):
 
 # LLaVA (Colab)
 def get_caption(image_path):
-    url = "https://stable-suite-insertion-track.trycloudflare.com/predict"  # 🔴 your ngrok
+    url = "https://expect-match-video-publication.trycloudflare.com/predict"
 
-    with open(image_path, 'rb') as f:
-        files = {'image': f}
-        response = requests.post(url, files=files)
+    try:
+        with open(image_path, 'rb') as f:
+            files = {'image': f}
+            response = requests.post(url, files=files, timeout=30)
 
-    return response.json().get("caption", "No caption")
+        if response.status_code != 200:
+            return f"Error from model API: {response.text}"
+
+        return response.json().get("caption", "No caption")
+
+    except Exception as e:
+        return f"Connection error: {str(e)}"
 
 # Cause
 def generate_cause(objects):
