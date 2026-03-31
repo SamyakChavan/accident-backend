@@ -22,7 +22,7 @@ def detect_objects(image_path):
 
 # LLaVA (Colab)
 def get_caption(image_path):
-    url = "https://chester-overtimorous-robbie.ngrok-free.dev/predict"  # 🔴 your ngrok
+    url = "https://stable-suite-insertion-track.trycloudflare.com/predict"  # 🔴 your ngrok
 
     with open(image_path, 'rb') as f:
         files = {'image': f}
