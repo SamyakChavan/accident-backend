@@ -22,7 +22,7 @@ def detect_objects(image_path):
 
 # LLaVA (Colab)
 def get_caption(image_path):
-    url = "https://expect-match-video-publication.trycloudflare.com/predict"
+    url = "https://mhz-brilliant-freely-dec.trycloudflare.com/predict"
 
     try:
         with open(image_path, 'rb') as f:
