@@ -27,7 +27,7 @@ def get_caption(image_path):
     try:
         with open(image_path, 'rb') as f:
             files = {'image': f}
-            response = requests.post(url, files=files, timeout=180)
+            response = requests.post(url, files=files, timeout=170)
 
         if response.status_code != 200:
             return f"Error from model API: {response.text}"
