@@ -22,12 +22,12 @@ def detect_objects(image_path):
 
 # LLaVA (Colab)
 def get_caption(image_path):
-    url = "https://mhz-brilliant-freely-dec.trycloudflare.com/predict"
+    url = "https://province-sized-website-claire.trycloudflare.com/predict"
 
     try:
         with open(image_path, 'rb') as f:
             files = {'image': f}
-            response = requests.post(url, files=files, timeout=170)
+            response = requests.post(url, files=files, timeout=160)
 
         if response.status_code != 200:
             return f"Error from model API: {response.text}"
