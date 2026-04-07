@@ -3,3 +3,4 @@ uvicorn
 ultralytics
 torch
 python-multipart
+transformers
