@@ -43,7 +43,7 @@ def detect_objects(image_path):
 # LLaVA (COLAB API)
 # =========================
 def get_caption(image_path):
-    url = "https://mag-viewed-correction-judicial.trycloudflare.com/predict"
+    url = "https://takes-insured-facing-copyrights.trycloudflare.com/predict"
 
     try:
         with open(image_path, 'rb') as f:
