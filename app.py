@@ -5,29 +5,10 @@ import requests
 
 app = FastAPI()
 
-# =========================
-# LOAD YOLO
-# =========================
+# Load YOLO 
 model = YOLO("yolov8n.pt")
 
-# =========================
-# LAZY LOAD FLAN-T5
-# =========================
-generator = None
-
-def get_generator():
-    global generator
-    if generator is None:
-        from transformers import pipeline
-        generator = pipeline(
-            "text2text-generation",
-            model="google/flan-t5-small"
-        )
-    return generator
-
-# =========================
-# YOLO DETECTION
-# =========================
+# YOLO detection
 def detect_objects(image_path):
     results = model(image_path)
     objects = []
@@ -39,11 +20,9 @@ def detect_objects(image_path):
 
     return objects
 
-# =========================
-# LLaVA (COLAB API)
-# =========================
+# LLaVA (Colab)
 def get_caption(image_path):
-    url = "https://helps-campbell-local-cube.trycloudflare.com/predict"
+    url = " https://henderson-disposition-meets-durable.trycloudflare.com/predict"
 
     try:
         with open(image_path, 'rb') as f:
@@ -51,62 +30,46 @@ def get_caption(image_path):
             response = requests.post(url, files=files, timeout=160)
 
         if response.status_code != 200:
-            return "Caption service error"
+            return f"Error from model API: {response.text}"
 
         return response.json().get("caption", "No caption")
 
-    except Exception:
-        return "Caption service unavailable"
+    except Exception as e:
+        return f"Connection error: {str(e)}"
 
-# =========================
-# AI ANALYSIS (FLAN-T5)
-# =========================
-def generate_ai_analysis(objects, caption):
+# Cause
+def generate_cause(objects):
+    if objects.count("car") >= 2:
+        return "Vehicle collision likely due to overspeeding."
+    elif "person" in objects and "car" in objects:
+        return "Pedestrian accident possible."
+    else:
+        return "Cause unclear."
 
-    try:
-        gen = get_generator()
+# Precautions
+def generate_precautions():
+    return [
+        "Maintain safe distance",
+        "Follow traffic rules",
+        "Avoid overspeeding"
+    ]
 
-        prompt = f"""
-        You are a traffic accident analysis system.
-
-        Scene: {caption}
-        Objects: {', '.join(objects)}
-
-        Provide:
-        Cause:
-        Precautions:
-        """
-
-        result = gen(prompt, max_length=80)[0]['generated_text']
-
-        return result
-
-    except Exception:
-        return "AI analysis temporarily unavailable."
-
-# =========================
-# API ENDPOINT
-# =========================
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-
     file_path = "temp.jpg"
 
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # Step 1: Object detection
     objects = detect_objects(file_path)
-
-    # Step 2: Caption (LLaVA)
     caption = get_caption(file_path)
+    cause = generate_cause(objects)
+    precautions = generate_precautions()
 
-    # Step 3: AI reasoning
-    analysis = generate_ai_analysis(objects, caption)
-
-    # Final response
     return {
         "objects": objects,
         "caption": caption,
-        "analysis": analysis
+        "cause": cause,
+        "precautions": precautions
     }
+    # test change 
