@@ -35,7 +35,7 @@ def detect_objects(image_path):
 
 # LLaVA (Colab)
 def get_caption(image_path):
-    url = "https://destinations-creator-misc-columbus.trycloudflare.com/predict"
+    url = "https://auto-springer-gabriel-stayed.trycloudflare.com/predict"
 
     try:
         with open(image_path, 'rb') as f:
