@@ -1,11 +1,24 @@
 from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware  # ADD THIS IMPORT
 from ultralytics import YOLO
 import shutil
 import requests
 
 app = FastAPI()
 
-# Load YOLO 
+# ============================================
+# ADD CORS MIDDLEWARE - COPY THIS ENTIRE BLOCK
+# ============================================
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins (for development)
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all HTTP methods (GET, POST, OPTIONS, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
+# ============================================
+
+# Load YOLO model
 model = YOLO("yolov8n.pt")
 
 # YOLO detection
@@ -66,10 +79,24 @@ async def predict(file: UploadFile = File(...)):
     cause = generate_cause(objects)
     precautions = generate_precautions()
 
+    # Clean up temp file
+    import os
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
     return {
         "objects": objects,
         "caption": caption,
         "cause": cause,
         "precautions": precautions
     }
-    # test change 
+
+# Optional: Add a health check endpoint
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "cors": "enabled", "message": "API is ready"}
+
+# Optional: Add root endpoint
+@app.get("/")
+async def root():
+    return {"message": "AccidentSense API is running", "cors_enabled": True}
