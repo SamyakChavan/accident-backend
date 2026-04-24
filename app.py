@@ -35,7 +35,7 @@ def detect_objects(image_path):
 
 # LLaVA (Colab)
 def get_caption(image_path):
-    url = "https://asin-eventually-corp-vsnet.trycloudflare.com/predict"
+    url = "https://calendar-driving-spy-resulted.trycloudflare.com/predict"
 
     try:
         with open(image_path, 'rb') as f:
